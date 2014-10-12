@@ -1,7 +1,11 @@
 #!/usr/bin/python
+from __future__ import unicode_literals
 from flask import Flask, Response
-import MySQLdb
 import json
+try:
+	import MySQLdb
+except ImportError:
+	import pymysql as MySQLdb
 
 app = Flask(__name__)
 
