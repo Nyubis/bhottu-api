@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from flask import Flask, Response
 import json
+from config import *
 try:
 	import MySQLdb
 except ImportError:
@@ -16,7 +17,7 @@ def lookupquote(nick=None, encoding=None):
 	if nick == None:
 		resp = "Pass a nick" if encoding == None else """{"error": "No nick provided"}"""
 		return Response(response=resp, mimetype=mimetype)
-	db = MySQLdb.connect(host="localhost", user="root", passwd="", db="bhottu")
+	db = MySQLdb.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWORD, db=DB_SCHEME)
 	cursor = db.cursor()
 
 	cursor.execute("SELECT quotation FROM quote WHERE name = %s", [nick])
@@ -38,3 +39,5 @@ def lookupquote(nick=None, encoding=None):
 
 if __name__ == "__main__":
 	app.run(debug=True)
+else:
+	application = app
