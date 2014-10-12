@@ -8,9 +8,9 @@ app = Flask(__name__)
 @app.route("/quotes/<nick>/")
 @app.route("/quotes/<nick>/<encoding>")
 def lookupquote(nick=None, encoding=None):
-	mimetype = "text/plain" if json == None else "application/json"
+	mimetype = "text/plain" if encoding == None else "application/json"
 	if nick == None:
-		resp = "Pass a nick" if json == None else """{"error": "No nick provided"}"""
+		resp = "Pass a nick" if encoding == None else """{"error": "No nick provided"}"""
 		return Response(response=resp, mimetype=mimetype)
 	db = MySQLdb.connect(host="localhost", user="root", passwd="", db="bhottu")
 	cursor = db.cursor()
@@ -18,7 +18,7 @@ def lookupquote(nick=None, encoding=None):
 	cursor.execute("SELECT quotation FROM quote WHERE name = %s", [nick])
 	rows = cursor.fetchall()
 	if len(rows) == 0:
-		resp = "No quotes found" if json == None else """{"error": "No quotes found for this nick"}"""
+		resp = "No quotes found" if encoding == None else """{"error": "No quotes found for this nick"}"""
 		return Response(response=resp, mimetype=mimetype)
 	if encoding == None:
 		results = ""
