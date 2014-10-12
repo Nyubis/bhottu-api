@@ -17,7 +17,7 @@ def lookupquote(nick=None, encoding=None):
 	if nick == None:
 		resp = "Pass a nick" if encoding == None else """{"error": "No nick provided"}"""
 		return Response(response=resp, mimetype=mimetype)
-	db = MySQLdb.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWORD, db=DB_SCHEME)
+	db = MySQLdb.connect(host=DB_HOST, user=DB_USER, passwd=DB_PASSWORD, db=DB_SCHEME, use_unicode=True)
 	cursor = db.cursor()
 
 	cursor.execute("SELECT quotation FROM quote WHERE name = %s", [nick])
