@@ -3,9 +3,9 @@ from flask import Flask, Response
 import json
 from config import *
 try:
-	import MySQLdb
+	import MySQLdb #python 2
 except ImportError:
-	import pymysql as MySQLdb
+	import pymysql as MySQLdb #python 3 substitute
 
 app = Flask(__name__)
 
@@ -25,9 +25,11 @@ def lookupquote(nick=None, encoding=None):
 		resp = "No quotes found" if encoding == None else """{"error": "No quotes found for this nick"}"""
 		return Response(response=resp, mimetype=mimetype)
 
+	#Transforming the data from the db into utf-8 is version-dependent
 	decode = decode_py2 if check_py_version() == 2 else decode_py3
 
 	if encoding == None:
+		#Return it as plaintext
 		results = ""
 		for row in rows:
 			results += "<%s> %s\n" % (nick, decode(row[0]))
@@ -35,6 +37,7 @@ def lookupquote(nick=None, encoding=None):
 		resp = Response(response=results, mimetype=mimetype)
 		return resp
 	elif encoding == "json":
+		#Return it as json
 		results = {"nick": nick, "quotes": []}
 		for row in rows:
 			results["quotes"].append(decode(row[0]))
@@ -50,7 +53,7 @@ def decode_py3(data):
 	return bytes(data, 'latin-1').decode('utf-8')
 
 def decode_py2(data):
-	""" Decode a latin-1 string and turn it into utf-8, the Python 3 way """
+	""" Decode a latin-1 string and turn it into utf-8, the Python 2 way """
 	return data.decode('utf-8')
 
 if __name__ == "__main__":
