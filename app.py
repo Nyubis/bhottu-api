@@ -46,9 +46,7 @@ def format(rows, encoding):
 
 	elif encoding == "json":
 		#Return it as json
-		results = {"nick": nick, "quotes": []}
-		for row in rows:
-			results["quotes"].append(decode(row[0]))
+		results = list(map(lambda x: {"nick": x[0], "quote": decode(x[1])}, rows))
 		return Response(response=json.dumps(results), mimetype=mimetype)
 
 def decode(data):
@@ -56,6 +54,6 @@ def decode(data):
 	return data.encode("latin-1").decode("utf-8", errors="replace")
 
 if __name__ == "__main__":
-	app.run(host="0.0.0.0", port=8000)
+	app.run(host="0.0.0.0", port=5000, debug=True)
 else:
 	application = app
