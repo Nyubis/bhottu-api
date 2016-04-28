@@ -2,6 +2,7 @@
 from flask import Flask, Response
 import json
 from config import *
+import sys
 
 if sys.version_info[0] < 3:
 	import MySQLdb
