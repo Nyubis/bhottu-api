@@ -2,7 +2,12 @@
 from flask import Flask, Response
 import json
 from config import *
-import pymysql as MySQLdb 
+import sys
+
+if sys.version_info[0] < 3:
+	import MySQLdb
+else:
+	import pymysql as MySQLdb 
 
 app = Flask(__name__)
 
