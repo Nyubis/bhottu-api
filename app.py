@@ -35,18 +35,17 @@ def lookupquote(nick=None, encoding=None):
 def format(rows, encoding):
 	mimetype = "text/plain" if encoding == None else "application/json"
 	if len(rows) == 0:
-		resp = "No quotes found" if encoding == None else """{"error": "No quotes found"}"""
+		resp = "No quotes found\n" if encoding == None else """{"error": "No quotes found"}"""
 		return Response(response=resp, mimetype=mimetype)
 
 	if encoding == None:
 		#Return it as plaintext
-		results = ""
-		results = "\n".join(map(lambda x: "<%s> %s" % (x[0], decode(x[1])), rows))
+		results = "\n".join(["<%s> %s" % (x[0], decode(x[1])) for x in rows]) + "\n"
 		return Response(response=results, mimetype=mimetype)
 
 	elif encoding == "json":
 		#Return it as json
-		results = list(map(lambda x: {"nick": x[0], "quote": decode(x[1])}, rows))
+		results = [{"nick": x[0], "quote": decode(x[1])} for x in rows]
 		return Response(response=json.dumps(results), mimetype=mimetype)
 
 def decode(data):
